@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.challenge.food.api.assembler.input.FormaPagamentoInput;
+import com.challenge.food.api.input.FormaPagamentoInput;
 import com.challenge.food.domain.model.FormaPagamento;
 
 @Component

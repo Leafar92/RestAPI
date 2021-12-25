@@ -37,9 +37,7 @@ public class CidadeService {
 	}
 	
 	@Transactional
-	public void update (Long idCidade, Cidade cidade) {
-		findById(idCidade);
-		
+	public void update (Cidade cidade) {
 		save(cidade);
 	}
 

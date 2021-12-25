@@ -1,9 +1,10 @@
 package com.challenge.food.domain.service;
 
-import javax.transaction.Transactional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.challenge.food.domain.exception.EntidadeNaoEncontradaException;
 import com.challenge.food.domain.exception.RecursoNaoEncontradoException;
@@ -40,5 +41,17 @@ public class RestauranteService {
 						String.format("O restaurante de id %d nao foi encontrado",idRestaurante)));
 		
 		return save(restaurante);
+	}
+	
+	@Transactional
+	public void ativar(Long id) {
+		Restaurante restaurante = findById(id);
+		restaurante.ativar();
+	}
+	
+	@Transactional
+	public void desativar(Long id) {
+		Restaurante restaurante = findById(id);
+		restaurante.desativar();
 	}
 }

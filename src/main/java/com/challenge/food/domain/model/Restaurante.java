@@ -1,8 +1,6 @@
 package com.challenge.food.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +14,12 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Builder
 public class Restaurante {
 
 	@Id
@@ -47,13 +40,22 @@ public class Restaurante {
 	@Embedded
 	private Endereco endereco;
 	
-	@CreationTimestamp
-	private OffsetDateTime dataCadastro;
-	
-	@UpdateTimestamp
-	private OffsetDateTime dataAtualizacao;
+//	@CreationTimestamp
+//	private OffsetDateTime dataCadastro;
+//	
+//	@UpdateTimestamp
+//	private OffsetDateTime dataAtualizacao;
 	
 	@OneToMany
 	private List<Produto> produtos = new ArrayList<>();
 	
+	private boolean ativo = true;
+	
+	public void ativar() {
+		this.ativo = true;
+	}
+	
+	public void desativar() {
+		this.ativo = false;
+	}
 }

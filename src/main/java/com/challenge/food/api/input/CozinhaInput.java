@@ -1,4 +1,4 @@
-package com.challenge.food.api.assembler.input;
+package com.challenge.food.api.input;
 
 import javax.validation.constraints.NotBlank;
 
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FormaPagamentoInput {
+public class CozinhaInput {
 	@NotBlank
 	private String nome;
 

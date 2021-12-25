@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.challenge.food.api.assembler.RestauranteInputDisassembler;
 import com.challenge.food.api.assembler.RestauranteModelAssembler;
-import com.challenge.food.api.assembler.input.RestauranteInput;
+import com.challenge.food.api.input.RestauranteInput;
 import com.challenge.food.api.model.RestauranteModel;
 import com.challenge.food.domain.model.Restaurante;
 import com.challenge.food.domain.repository.RestauranteRepository;
@@ -80,6 +81,18 @@ public class RestauranteController {
 
 		return restauranteModelAssemble.toModel(saved);
 
+	}
+	
+	@PutMapping("{/idRestaurante/ativacao}")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void ativar(@PathVariable Long idRestaurante) {
+		service.ativar(idRestaurante);
+	}
+	
+	@DeleteMapping("{/idRestaurante/desativacao}")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void desativar(@PathVariable Long idRestaurante) {
+		service.desativar(idRestaurante);
 	}
 
 }

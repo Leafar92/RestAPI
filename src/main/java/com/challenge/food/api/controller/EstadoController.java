@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.challenge.food.api.assembler.EstadoInputDisassembler;
 import com.challenge.food.api.assembler.EstadoModelAssembler;
-import com.challenge.food.api.assembler.input.EstadoInput;
+import com.challenge.food.api.input.EstadoInput;
 import com.challenge.food.api.model.EstadoModel;
 import com.challenge.food.domain.model.Estado;
 import com.challenge.food.domain.repository.EstadoRespository;

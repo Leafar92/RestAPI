@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.challenge.food.api.assembler.FormaPagamentoInputDisassembler;
 import com.challenge.food.api.assembler.FormaPagamentoModelAssembler;
-import com.challenge.food.api.assembler.input.FormaPagamentoInput;
+import com.challenge.food.api.input.FormaPagamentoInput;
 import com.challenge.food.api.model.FormaPagamentoModel;
 import com.challenge.food.domain.model.FormaPagamento;
 import com.challenge.food.domain.repository.FormaPagamentoRepository;

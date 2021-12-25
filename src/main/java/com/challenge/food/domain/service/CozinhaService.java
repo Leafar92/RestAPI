@@ -1,13 +1,16 @@
 package com.challenge.food.domain.service;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.challenge.food.domain.exception.EntidadeNaoEncontradaException;
+import com.challenge.food.domain.exception.RecursoCadastradoException;
 import com.challenge.food.domain.model.Cozinha;
+import com.challenge.food.domain.model.Estado;
 import com.challenge.food.domain.repository.CozinhaRespository;
 
 @Service
@@ -28,9 +31,17 @@ public class CozinhaService {
 	}
 
 	@Transactional
-	public void delete(Long id) throws SQLException {
+	public void delete(Long id) {
 		cozinhaRespository.delete(findById(id));
 		cozinhaRespository.flush();
 	}
+	
+	public void verifyByName(String nome) {
+		Optional<Cozinha> containsByName = cozinhaRespository.findByName(nome);
+		if(containsByName.isPresent()){
+			throw new RecursoCadastradoException(nome);
+		}
+	}
+
 
 }

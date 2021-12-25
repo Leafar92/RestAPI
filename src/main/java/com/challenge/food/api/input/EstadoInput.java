@@ -1,4 +1,4 @@
-package com.challenge.food.api.assembler.input;
+package com.challenge.food.api.input;
 
 import javax.validation.constraints.NotBlank;
 
