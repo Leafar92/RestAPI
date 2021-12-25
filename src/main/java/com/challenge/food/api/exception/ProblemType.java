@@ -7,6 +7,7 @@ public enum ProblemType {
 	ERRO_DE_SISTEMA("Erro de sistema", "/erro-de-sistema"),
 	PARAMETRO_INVALIDO("Parametro invalido ", "/parametro-invalido"),
 	DADOS_INVALIDOS("Dados invalidos", "/dados-invalidos"),
+	RECURSO_JA_EXISTE("Recurso ja existe", "/recurso-ja-cadastrado"),
 	RECURSO_EM_USO("Rescurso em uso", "/recurso-em-uso");
 	
 	private String title;

@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,6 @@ import com.challenge.food.api.assembler.EstadoInputDisassembler;
 import com.challenge.food.api.assembler.EstadoModelAssembler;
 import com.challenge.food.api.assembler.input.EstadoInput;
 import com.challenge.food.api.model.EstadoModel;
-import com.challenge.food.domain.exception.RecursoEmUsoException;
 import com.challenge.food.domain.model.Estado;
 import com.challenge.food.domain.repository.EstadoRespository;
 import com.challenge.food.domain.service.EstadoService;
@@ -49,7 +47,7 @@ public class EstadoController {
 
 	@GetMapping("/{idEstado}")
 	public EstadoModel findById(@PathVariable Long idEstado) {
-		return estadoModelAssembler.toModel(estadoService.findById(idEstado));
+		return estadoModelAssembler.toModel(estadoService.findByIdOrThrowException(idEstado));
 	}
 
 	@PostMapping
@@ -62,22 +60,20 @@ public class EstadoController {
 	@PutMapping("/{idEstado}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void update(@PathVariable Long idEstado, @RequestBody EstadoInput input) {
-		Estado estadoBD = estadoService.findById(idEstado);
+		Estado estadoBD = estadoService.findByIdOrThrowException(idEstado);
 
+		estadoService.verifyByName(input.getNome());
+		
 		estadoInputDisassembler.copyToDomainObject(estadoBD, input);
 
-		estadoService.update(idEstado, estadoBD);
+		estadoService.update(estadoBD);
 
 	}
 
 	@DeleteMapping("/{idEstado}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long idEstado) {
-		try {
-			estadoService.delete(idEstado);
-		} catch (DataIntegrityViolationException e) {
-			throw new RecursoEmUsoException(String.format("o Estado de ID %d esta sendo utilizado", idEstado));
-		}
+		estadoService.delete(idEstado);
 	}
 
 }

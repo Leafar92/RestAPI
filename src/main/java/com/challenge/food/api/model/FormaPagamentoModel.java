@@ -1,11 +1,13 @@
 package com.challenge.food.api.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class EstadoModel {
+@Builder
+public class FormaPagamentoModel {
 
 	private Long id;
 

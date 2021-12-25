@@ -30,7 +30,7 @@ public class CidadeService {
 	
 	@Transactional
 	public Cidade save(Cidade cidade) {
-			Estado estado = estadoService.findById(cidade.getEstado().getId());	
+			Estado estado = estadoService.findByIdOrThrowException(cidade.getEstado().getId());	
 			cidade.setEstado(estado);
 			return cidadeRepository.save(cidade);
 		

@@ -16,7 +16,7 @@
 	<description>Projeto Challenge</description>
 	<properties>
 		<java.version>11</java.version>
-		<model.mapper.version>2.4.5</model.mapper.version>
+		<model.mapper.version>2.3.0</model.mapper.version>
 	</properties>
 	<dependencies>
 		<dependency>

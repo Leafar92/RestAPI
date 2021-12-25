@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.challenge.food.domain.exception.EntidadeNaoEncontradaException;
 import com.challenge.food.domain.exception.NegocioException;
+import com.challenge.food.domain.exception.RecursoCadastradoException;
 import com.challenge.food.domain.exception.RecursoEmUsoException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
@@ -152,6 +153,12 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> tratarEntidadeNaoEncontrada(RecursoEmUsoException e, WebRequest request) {
 		Problem body = createProblem(HttpStatus.CONFLICT.value(), e.getMessage(), ProblemType.RECURSO_EM_USO).build();
 		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+	
+	@ExceptionHandler(RecursoCadastradoException.class)
+	public ResponseEntity<?> tratarRecursoJaCadastrado(RecursoCadastradoException e, WebRequest request) {
+		Problem body = createProblem(HttpStatus.BAD_REQUEST.value(), e.getMessage(), ProblemType.RECURSO_JA_EXISTE).build();
+		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 
 	@ExceptionHandler(NegocioException.class)

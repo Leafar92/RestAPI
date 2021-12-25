@@ -1,11 +1,16 @@
 package com.challenge.food.domain.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.challenge.food.domain.exception.EstadoNaoEncontradoException;
+import com.challenge.food.domain.exception.RecursoCadastradoException;
+import com.challenge.food.domain.exception.RecursoEmUsoException;
 import com.challenge.food.domain.model.Estado;
 import com.challenge.food.domain.repository.EstadoRespository;
 
@@ -15,30 +20,39 @@ public class EstadoService {
 	@Autowired
 	private EstadoRespository estadoRepository;
 
-	public Estado findById(Long id) {
+	public Estado findByIdOrThrowException(Long id) {
 		return estadoRepository.findById(id).orElseThrow(() -> new EstadoNaoEncontradoException(id));
 	}
 
 	@Transactional
 	public Estado save(Estado estado) {
+		verifyByName(estado.getNome());
 		return estadoRepository.save(estado);
 	}
 
 	@Transactional
-	public void update(Long idEstado, Estado estado) {
-		findById(idEstado);
-
-		save(estado);
+	public void update(Estado estado) {
+		estadoRepository.save(estado);
 	}
 
 	@Transactional
 	public void delete(Long idEstado) {
-		Estado estado = findById(idEstado);
+		Estado estado = findByIdOrThrowException(idEstado);
 
-		estadoRepository.delete(estado);
-		
-		estadoRepository.flush();
+		try {
+			estadoRepository.delete(estado);
+			estadoRepository.flush();
+		} catch (DataIntegrityViolationException e) {
+			throw new RecursoEmUsoException(String.format("O estado de id %d nao pode ser excluido", idEstado));
+		}
 
+	}
+	
+	public void verifyByName(String nome) {
+		Optional<Estado> containsByName = estadoRepository.findByName(nome);
+		if(containsByName.isPresent()){
+			throw new RecursoCadastradoException(nome);
+		}
 	}
 
 }
