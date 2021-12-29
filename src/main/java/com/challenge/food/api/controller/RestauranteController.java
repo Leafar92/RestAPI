@@ -83,13 +83,13 @@ public class RestauranteController {
 
 	}
 	
-	@PutMapping("{/idRestaurante/ativacao}")
+	@PutMapping("/{idRestaurante}/ativacao")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void ativar(@PathVariable Long idRestaurante) {
 		service.ativar(idRestaurante);
 	}
 	
-	@DeleteMapping("{/idRestaurante/desativacao}")
+	@DeleteMapping("/{idRestaurante}/desativacao")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void desativar(@PathVariable Long idRestaurante) {
 		service.desativar(idRestaurante);

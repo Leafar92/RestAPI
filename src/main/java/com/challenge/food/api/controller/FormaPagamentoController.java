@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +21,13 @@ import com.challenge.food.api.assembler.FormaPagamentoInputDisassembler;
 import com.challenge.food.api.assembler.FormaPagamentoModelAssembler;
 import com.challenge.food.api.input.FormaPagamentoInput;
 import com.challenge.food.api.model.FormaPagamentoModel;
+import com.challenge.food.domain.exception.NegocioException;
 import com.challenge.food.domain.model.FormaPagamento;
 import com.challenge.food.domain.repository.FormaPagamentoRepository;
 import com.challenge.food.domain.service.FormaPagamentoService;
 
 @RestController
-@RequestMapping("/formasPagamento")
+@RequestMapping("/formas-pagamento")
 public class FormaPagamentoController {
 
 	@Autowired
@@ -62,16 +64,23 @@ public class FormaPagamentoController {
 	public void update(@PathVariable Long idFormaPagamento, @RequestBody FormaPagamentoInput input) {
 		FormaPagamento formaPagamentoBD = formarPagamentoService.findByIdOrThrowException(idFormaPagamento);
 
+		formarPagamentoService.verifyByName(input.getNome());
+
 		formaPagamentoInputDisassembler.copyToDomainObject(formaPagamentoBD, input);
 
-		formarPagamentoService.update(idFormaPagamento, formaPagamentoBD);
+		formarPagamentoService.update(formaPagamentoBD);
 
 	}
 
 	@DeleteMapping("/{idFormaPagamento}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long idFormaPagamento) {
-		formarPagamentoService.delete(idFormaPagamento);
+		try {
+			formarPagamentoService.delete(idFormaPagamento);
+		} catch (DataIntegrityViolationException e) {
+			throw new NegocioException(
+					String.format("A forma de pagamento de ID %d nao pode ser excluida", idFormaPagamento));
+		}
 	}
 
 }
