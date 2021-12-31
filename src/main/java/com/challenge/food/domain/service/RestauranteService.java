@@ -50,8 +50,20 @@ public class RestauranteService {
 	}
 	
 	@Transactional
+	public void abrir(Long id) {
+		Restaurante restaurante = findById(id);
+		restaurante.abrir();
+	}
+	
+	@Transactional
 	public void desativar(Long id) {
 		Restaurante restaurante = findById(id);
 		restaurante.desativar();
+	}
+	
+	@Transactional
+	public void fechar(Long id) {
+		Restaurante restaurante = findById(id);
+		restaurante.fechar();
 	}
 }

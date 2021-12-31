@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -56,11 +55,21 @@ public class Restaurante {
 	
 	private boolean ativo = true;
 	
+	private boolean aberto = true;
+	
 	public void ativar() {
 		this.ativo = true;
 	}
 	
 	public void desativar() {
 		this.ativo = false;
+	}
+	
+	public void abrir() {
+		this.aberto = true;
+	}
+	
+	public void fechar() {
+		this.aberto = false;
 	}
 }

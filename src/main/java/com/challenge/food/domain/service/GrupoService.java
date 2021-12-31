@@ -1,12 +1,19 @@
 package com.challenge.food.domain.service;
 
-import javax.transaction.Transactional;
+
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.challenge.food.domain.exception.GrupoNaoEncontradoException;
+import com.challenge.food.domain.exception.NegocioException;
 import com.challenge.food.domain.model.Grupo;
+import com.challenge.food.domain.model.Permissao;
 import com.challenge.food.domain.repository.GrupoRepository;
 
 @Service
@@ -26,8 +33,8 @@ public class GrupoService {
 	}
 
 	@Transactional
-	public void update(Grupo formaPagamento) {
-		grupoRepository.save(formaPagamento);
+	public void update(Grupo grupo) {
+		grupoRepository.save(grupo);
 	}
 
 	@Transactional
@@ -37,11 +44,28 @@ public class GrupoService {
 			grupoRepository.flush();
 	}
 	
-//	public void verifyByName(String nome) {
-//		Optional<Grupo> containsByName = grupoRepository.findByName(nome);
-//		if(containsByName.isPresent()){
-//			throw new RecursoCadastradoException(nome);
-//		}
-	//}
+	@Transactional
+	public void associarPermissao(Grupo grupo, Permissao permissao) {
+		grupo.associarPermissao(permissao);
 
+	}
+	
+	@Transactional
+	public void desassociarPermissao(Grupo grupo, Permissao permissao) {
+		
+		Permissao found = getPermissaoOrThrosException(grupo, permissao);
+		
+		grupo.desassociarPermissao(found);
+		
+	}
+
+	public Permissao getPermissaoOrThrosException(Grupo grupo, Permissao permissao) {
+	 Optional<Permissao> found = grupo.getPermissoes().stream().filter(p -> p.equals(permissao)).findFirst();
+		if(grupo.getPermissoes().isEmpty() || found.isEmpty()) {
+			throw new NegocioException(String.format("O grupo de id %d nao possui a permissao %d", grupo.getId(), permissao.getId()));
+		}
+		
+		return found.get();
+	}
+	
 }

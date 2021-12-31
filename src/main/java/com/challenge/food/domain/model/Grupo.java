@@ -1,7 +1,9 @@
 package com.challenge.food.domain.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +31,14 @@ public class Grupo {
 	@ManyToMany
 	@JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name="grupo_id"), 
 	inverseJoinColumns = @JoinColumn(name= "permissao_id"))
-	private List<Permissao> permissoes = new ArrayList<>();
+	private Set<Permissao> permissoes = new HashSet<>();
+	
+	public void associarPermissao(Permissao p) {
+		permissoes.add(p);
+	}
+	
+	public void desassociarPermissao(Permissao p) {
+		permissoes.remove(p);
+	}
 	
 }
