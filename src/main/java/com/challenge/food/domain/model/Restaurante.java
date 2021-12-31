@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
@@ -46,7 +49,9 @@ public class Restaurante {
 //	@UpdateTimestamp
 //	private OffsetDateTime dataAtualizacao;
 	
-	@OneToMany
+	@ManyToMany
+	@JoinTable(name = "restaurante_produto", joinColumns = @JoinColumn(name="id_restaurante"), 
+	inverseJoinColumns = @JoinColumn(name= "id_produto"))
 	private List<Produto> produtos = new ArrayList<>();
 	
 	private boolean ativo = true;
