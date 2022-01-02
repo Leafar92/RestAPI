@@ -1,5 +1,6 @@
 package com.challenge.food.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class UsuarioModelAssembler {
 		return modelMapper.map(user, UsuarioModel.class);
 	}
 	
-	public List<UsuarioModel> toListModel(List<Usuario> users){
+	public List<UsuarioModel> toListModel(Collection<Usuario> users){
 		return users.stream().map(r -> toModel(r))
 				.collect(Collectors.toList());
 	}

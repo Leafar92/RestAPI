@@ -2,7 +2,9 @@ package com.challenge.food.domain.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -56,6 +58,20 @@ public class Restaurante {
 	private boolean ativo = true;
 	
 	private boolean aberto = true;
+	
+	@ManyToMany
+	@JoinTable(name = "restaurante_usuario_responsavel", joinColumns = @JoinColumn(name="id_restaurante"),
+	inverseJoinColumns =  @JoinColumn(name="id_usuario"))
+	private Set<Usuario> responsaveis = new HashSet<>();
+	
+	
+	public void associarResponsavel(Usuario u) {
+		this.responsaveis.add(u);
+	}
+	
+	public void desassociarResponsavel(Usuario u) {
+		this.responsaveis.remove(u);
+	}
 	
 	public void ativar() {
 		this.ativo = true;
