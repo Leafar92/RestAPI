@@ -1,10 +1,17 @@
 package com.challenge.food.domain.model;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
@@ -32,10 +39,18 @@ public class Usuario {
 	@CreationTimestamp
 	private OffsetDateTime dataCadastro;
 	
-//	@ManyToMany
-//	@JoinTable(name = "usuario_grupo", joinColumns =  @JoinColumn(name="usuario_id"), inverseJoinColumns = 
-//	@JoinColumn(name="grupo_id"))
-//	private List<Grupo> grupos = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "usuario_grupo", joinColumns =  @JoinColumn(name="id_usuario"), inverseJoinColumns = 
+	@JoinColumn(name="id_grupo"))
+	private Set<Grupo> grupos = new HashSet<>();
+	
+	public void associarGrupo(Grupo g) {
+		this.grupos.add(g);
+	}
+	
+	public void desassociarGrupo(Grupo g) {
+		this.grupos.remove(g);
+	}
 	
 	@PrePersist
 	private void prePersist() {

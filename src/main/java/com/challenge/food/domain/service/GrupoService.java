@@ -2,6 +2,7 @@ package com.challenge.food.domain.service;
 
 
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -21,6 +22,9 @@ public class GrupoService {
 
 	@Autowired
 	private GrupoRepository grupoRepository;
+	
+	@Autowired
+	private PermissaoService permissaoService;
 
 	public Grupo findByIdOrThrowException(Long id) {
 		return grupoRepository.findById(id).orElseThrow(() -> new GrupoNaoEncontradoException(id));
@@ -53,19 +57,21 @@ public class GrupoService {
 	@Transactional
 	public void desassociarPermissao(Grupo grupo, Permissao permissao) {
 		
-		Permissao found = getPermissaoOrThrosException(grupo, permissao);
+		Permissao found = permissaoService.getPermissaoOrThrosException(grupo, permissao);
 		
 		grupo.desassociarPermissao(found);
 		
 	}
 
-	public Permissao getPermissaoOrThrosException(Grupo grupo, Permissao permissao) {
-	 Optional<Permissao> found = grupo.getPermissoes().stream().filter(p -> p.equals(permissao)).findFirst();
-		if(grupo.getPermissoes().isEmpty() || found.isEmpty()) {
-			throw new NegocioException(String.format("O grupo de id %d nao possui a permissao %d", grupo.getId(), permissao.getId()));
+	public Grupo getGrupoOrThrowsException(Set<Grupo> grupos, Long idGrupo, Long idUsuario) {
+		Grupo grupo = findByIdOrThrowException(idGrupo);
+		Optional<Grupo> found = grupos.stream().filter(g -> g.equals(grupo)).findFirst();
+		if (grupos.isEmpty() || found.isEmpty()) {
+			throw new NegocioException(
+					String.format("O Usuario de id %d nao possui o grupo de id %d", idUsuario, grupo.getId()));
 		}
-		
+
 		return found.get();
 	}
-	
+
 }

@@ -63,7 +63,7 @@ public class GrupoPermissaoController {
 		
 		Permissao permissao = permissaoService.findByIdOrThrowException(idPermissao);
 		
-		Permissao found = grupoService.getPermissaoOrThrosException(grupo, permissao);
+		Permissao found = permissaoService.getPermissaoOrThrosException(grupo, permissao);
 		
 		return permissaoModelAssembler.toModel(found);
 	}

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.challenge.food.domain.exception.NegocioException;
 import com.challenge.food.domain.exception.RecursoEmUsoException;
 import com.challenge.food.domain.exception.UsuarioNaoEncontradoException;
+import com.challenge.food.domain.model.Grupo;
+import com.challenge.food.domain.model.Permissao;
 import com.challenge.food.domain.model.Usuario;
 import com.challenge.food.domain.repository.UsuarioRepository;
 
@@ -49,6 +51,18 @@ public class UsuarioService {
 		Usuario user = findByIdOrThrowException(idUser);
 			usuarioRepository.delete(user);
 			usuarioRepository.flush();
+	}
+	
+	@Transactional
+	public void associarGrupo(Grupo grupo, Usuario usuario) {
+		usuario.associarGrupo(grupo);
+
+	}
+	
+	@Transactional
+	public void desassociarGrupo(Grupo grupo, Usuario usuario) {
+		usuario.desassociarGrupo(grupo);
+
 	}
 	
 	public void validarSenha(String senha, String confirmacao) {
