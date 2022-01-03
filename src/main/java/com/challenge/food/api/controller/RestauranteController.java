@@ -18,9 +18,10 @@ import com.challenge.food.api.assembler.RestauranteInputDisassembler;
 import com.challenge.food.api.assembler.RestauranteModelAssembler;
 import com.challenge.food.api.input.RestauranteInput;
 import com.challenge.food.api.model.RestauranteModel;
+import com.challenge.food.domain.exception.NegocioException;
+import com.challenge.food.domain.exception.RecursoNaoEncontradoException;
 import com.challenge.food.domain.model.Restaurante;
 import com.challenge.food.domain.repository.RestauranteRepository;
-import com.challenge.food.domain.service.CozinhaService;
 import com.challenge.food.domain.service.RestauranteService;
 
 @RestController
@@ -39,9 +40,6 @@ public class RestauranteController {
 	@Autowired
 	private RestauranteInputDisassembler restauranteInputDisassembler;
 
-	@Autowired
-	private CozinhaService cozinhaService;
-
 	@GetMapping
 	public List<RestauranteModel> listar() {
 		return restauranteModelAssemble.toListModel(restauranteRepository.findAll());
@@ -52,16 +50,6 @@ public class RestauranteController {
 		return restauranteModelAssemble.toModel(service.findById(restauranteID));
 	}
 
-//	@GetMapping("/dinamica")
-//	public ResponseEntity<?> findDinamica(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal) {
-//
-//		try {
-//			return ResponseEntity.ok(restauranteRepository.find(nome, taxaInicial, taxaFinal));
-//		} catch (EntidadeNaoEncontradaException e) {
-//			return ResponseEntity.notFound().build();
-//		}
-//
-//	}
 
 	@PutMapping("/{idRestaurante}")
 	public RestauranteModel update(@PathVariable Long idRestaurante, @RequestBody RestauranteInput input) {
@@ -89,10 +77,20 @@ public class RestauranteController {
 		service.ativar(idRestaurante);
 	}
 	
-	@DeleteMapping("/{idRestaurante}/desativacao")
+	@PutMapping("/ativacao-restaurantes")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void desativar(@PathVariable Long idRestaurante) {
-		service.desativar(idRestaurante);
+	public void ativar(@RequestBody List<Long> idsRestaurante) {
+		try {
+			service.ativar(idsRestaurante);
+		}catch(RecursoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage());
+		}
+	}
+	
+	@DeleteMapping("/desativacao-restaurantes")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void desativar(@RequestBody  List<Long> idsRestaurante) {
+		service.desativar(idsRestaurante);
 	}
 	
 	@PutMapping("/{idRestaurante}/abertura")

@@ -1,0 +1,1 @@
+alter table pedido add column status_pedido varchar(20);
