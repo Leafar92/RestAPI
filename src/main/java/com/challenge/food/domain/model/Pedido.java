@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -33,12 +35,12 @@ public class Pedido {
 	private Long id;
 	
 	@Column(name = "sub_total")
-	private BigDecimal subtotal;
+	private BigDecimal subtotal = BigDecimal.ZERO;
 	private BigDecimal taxaFrete;
-	private BigDecimal valorTotal;
+	private BigDecimal valorTotal = BigDecimal.ZERO;;
 	
-//	@Embedded
-//	private Endereco enderecoEntrega;
+	@Embedded
+	private Endereco enderecoEntrega;
 
 	
 	@Enumerated(EnumType.STRING)
@@ -63,6 +65,12 @@ public class Pedido {
 	@JoinColumn(name = "usuario_cliente_id", nullable = false)
 	private Usuario cliente;
 	
-	@OneToMany(mappedBy = "pedido")
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	private List<ItemPedido> itens = new ArrayList<>();
+	
+	public void calcularTotalPedido() {
+		Double totalProdutos = this.getItens().stream().collect(Collectors.summingDouble(i -> i.getPrecoTotal().doubleValue()));
+		this.subtotal = subtotal.add(new BigDecimal(totalProdutos));
+		this.valorTotal = subtotal.add(taxaFrete);
+	}
 }

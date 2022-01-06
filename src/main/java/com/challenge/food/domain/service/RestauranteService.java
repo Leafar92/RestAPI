@@ -12,6 +12,7 @@ import com.challenge.food.domain.exception.EntidadeNaoEncontradaException;
 import com.challenge.food.domain.exception.NegocioException;
 import com.challenge.food.domain.exception.RecursoNaoEncontradoException;
 import com.challenge.food.domain.model.Cozinha;
+import com.challenge.food.domain.model.FormaPagamento;
 import com.challenge.food.domain.model.Restaurante;
 import com.challenge.food.domain.model.Usuario;
 import com.challenge.food.domain.repository.RestauranteRepository;
@@ -108,5 +109,13 @@ public class RestauranteService {
 		}
 
 		return found.get();
+	}
+	
+	public FormaPagamento getFormaPagamentoOrThrowsException(Restaurante r, FormaPagamento f) {
+		return r.getFormasPagamento().stream()
+				.filter(item -> item == f)
+				.findFirst()
+				.orElseThrow(() -> new NegocioException
+						(String.format("O restaurante de id %d nao possui forma de pagamento de id", r.getId(), f.getId())));
 	}
 }

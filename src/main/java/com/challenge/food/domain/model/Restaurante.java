@@ -64,6 +64,11 @@ public class Restaurante {
 	inverseJoinColumns =  @JoinColumn(name="id_usuario"))
 	private Set<Usuario> responsaveis = new HashSet<>();
 	
+	@ManyToMany
+	@JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name="restaurante_id"), 
+	inverseJoinColumns = @JoinColumn(name="forma_pagamento_id"))
+	private Set<FormaPagamento> formasPagamento = new HashSet<>();
+	
 	
 	public void associarResponsavel(Usuario u) {
 		this.responsaveis.add(u);

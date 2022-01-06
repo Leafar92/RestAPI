@@ -35,4 +35,7 @@ public class ItemPedido {
 	@JoinColumn(nullable = false, name = "id_produto")
 	private Produto produto;
 
+	public void calcularItens() {
+		precoTotal = precoUnitario.multiply(new BigDecimal(quantidade));
+	}
 }
