@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -18,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -33,6 +35,8 @@ public class Pedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String codigo;
 	
 	@Column(name = "sub_total")
 	private BigDecimal subtotal = BigDecimal.ZERO;
@@ -72,5 +76,15 @@ public class Pedido {
 		Double totalProdutos = this.getItens().stream().collect(Collectors.summingDouble(i -> i.getPrecoTotal().doubleValue()));
 		this.subtotal = subtotal.add(new BigDecimal(totalProdutos));
 		this.valorTotal = subtotal.add(taxaFrete);
+	}
+	
+	@PrePersist
+	private void prePersist() {
+		this.dataCriacao = OffsetDateTime.now();
+		createUuid();
+	}
+	
+	private void createUuid() {
+		setCodigo(UUID.randomUUID().toString());		
 	}
 }

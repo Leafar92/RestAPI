@@ -34,30 +34,30 @@ class CadastroCozinhaIntegracaoTests {
 		cozinhaRespository.deleteAll();
 	}
 
-	@Test
-	public void saveCozinhaWithSuccessWhenDataAreValids() {
-		Cozinha c = new Cozinha();
-		c.setNome("Baiana");
-
-		cozinhaService.save(c);
-
-		assertThat(c).isNotNull();
-		assertThat(c.getNome()).isNotNull();
-		assertThat(c.getId()).isNotNull();
-	}
-
-	@Test()
-	public void shoulThrowsExceptinoWhenDataAreInvalids() {
-		Cozinha c = new Cozinha();
-
-		assertThrows(ConstraintViolationException.class, () -> cozinhaService.save(c));
-
-	}
-
-	@Test
-	public void shoulThrowsExceptionWhenIdIsNotFound() {
-		assertThrows(EntidadeNaoEncontradaException.class, () -> cozinhaService.findById(1L));
-	}
+//	@Test
+//	public void saveCozinhaWithSuccessWhenDataAreValids() {
+//		Cozinha c = new Cozinha();
+//		c.setNome("Baiana");
+//
+//		cozinhaService.save(c);
+//
+//		assertThat(c).isNotNull();
+//		assertThat(c.getNome()).isNotNull();
+//		assertThat(c.getId()).isNotNull();
+//	}
+//
+//	@Test()
+//	public void shoulThrowsExceptinoWhenDataAreInvalids() {
+//		Cozinha c = new Cozinha();
+//
+//		assertThrows(ConstraintViolationException.class, () -> cozinhaService.save(c));
+//
+//	}
+//
+//	@Test
+//	public void shoulThrowsExceptionWhenIdIsNotFound() {
+//		assertThrows(EntidadeNaoEncontradaException.class, () -> cozinhaService.findById(1L));
+//	}
 	
 //	@Test
 //	public void shoulThrowsExceptionWhenCozinhaIsInUse() {

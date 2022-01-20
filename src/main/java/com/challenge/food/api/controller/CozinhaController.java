@@ -8,6 +8,9 @@ import javax.validation.Valid;
 import org.hibernate.validator.internal.util.Contracts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,8 +50,14 @@ public class CozinhaController {
 	private CozinhaInputDisassembler cozinhaInputAssembler;
 	
 	@GetMapping
-	public List<CozinhaModel> listar(){
-		return cozinhaAssembler.toListModel(cozinhaRepository.findAll());
+	public Page<CozinhaModel> listar(Pageable pagebable){
+		Page<Cozinha> cozinhas = cozinhaRepository.findAll(pagebable);
+		
+		 List<CozinhaModel> cozinhasModel = cozinhaAssembler.toListModel(cozinhas.getContent());
+		 
+		 Page<CozinhaModel> cozinhasPage = new PageImpl<>(cozinhasModel, pagebable, cozinhas.getTotalElements());
+		 
+		 return cozinhasPage;
 	}
 	
 	@GetMapping("/{idCozinha}")

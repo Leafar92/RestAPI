@@ -8,7 +8,8 @@ public enum ProblemType {
 	PARAMETRO_INVALIDO("Parametro invalido ", "/parametro-invalido"),
 	DADOS_INVALIDOS("Dados invalidos", "/dados-invalidos"),
 	RECURSO_JA_EXISTE("Recurso ja existe", "/recurso-ja-cadastrado"),
-	RECURSO_EM_USO("Rescurso em uso", "/recurso-em-uso");
+	RECURSO_EM_USO("Rescurso em uso", "/recurso-em-uso"),
+	VIOLACAO_DE_NEGOCIO("Violacao de negocio", "/violacao-de-negocio");
 	
 	private String title;
 	private String uri;

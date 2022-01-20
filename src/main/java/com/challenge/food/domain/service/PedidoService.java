@@ -1,9 +1,6 @@
 package com.challenge.food.domain.service;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,13 +37,37 @@ public class PedidoService {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	public Pedido findByIdOrThrowException(Long id) {
-		return pedidoRespository.findById(id).orElseThrow(() -> new PedidoNaoEncontradoException(id));
+	public Pedido findByCodigoOrThrowException(String codigo) {
+		return pedidoRespository.findByCodigo(codigo).orElseThrow(() -> new PedidoNaoEncontradoException(codigo));
 	}
 
 	public Pedido save(Pedido pedido) {
+		Restaurante restaurante = validarPedido(pedido);
 		
+		List<ItemPedido> itens = validarItem(pedido, restaurante);
+		
+		pedido.setTaxaFrete(restaurante.getTaxaFrete());
+		calcularItensPedido(itens);
+		pedido.setItens(itens);
+		
+		pedido.calcularTotalPedido();
+		
+		return pedidoRespository.save(pedido);
+		
+	}
 
+	private List<ItemPedido> validarItem(Pedido pedido, Restaurante restaurante) {
+		List<ItemPedido> itens = pedido.getItens();
+		
+		
+		itens.forEach(item -> {
+			Produto produto = verificarProduto(item, restaurante.getId());
+			item.setProduto(produto);
+		});
+		return itens;
+	}
+
+	private Restaurante validarPedido(Pedido pedido) {
 		Usuario cliente = usuarioService.findByIdOrThrowException(pedido.getCliente().getId());
 		pedido.setCliente(cliente);
 		
@@ -59,26 +80,7 @@ public class PedidoService {
 		FormaPagamento formaPagamento = formaPagamentoService.findByIdOrThrowException(pedido.getFormaPagamento().getId());
 		restauranteService.getFormaPagamentoOrThrowsException(restaurante, formaPagamento);
 		pedido.setFormaPagamento(formaPagamento);
-		
-		List<ItemPedido> itens = pedido.getItens();
-		
-		
-		itens.forEach(item -> {
-			Produto produto = verificarProduto(item, restaurante.getId());
-			item.setProduto(produto);
-		});
-		
-		
-		
-		
-		pedido.setTaxaFrete(restaurante.getTaxaFrete());
-		calcularItensPedido(itens);
-		pedido.setItens(itens);
-		
-		pedido.calcularTotalPedido();
-		
-		return pedidoRespository.save(pedido);
-		
+		return restaurante;
 	}
 	
 	public void calcularItensPedido(List<ItemPedido> itens) {

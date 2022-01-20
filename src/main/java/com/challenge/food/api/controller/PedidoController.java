@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,13 +45,18 @@ public class PedidoController {
 	private PedidoInputDisassembler pedidoInputAssembler;
 
 	@GetMapping
-	public List<PedidoModel> listar() {
-		return pedidoModelAssembler.toListModel(pedidoRepository.findAll());
+	public Page<PedidoModel> listar(Pageable pageable) {
+		Page<Pedido> pedidos = pedidoRepository.findAll(pageable);
+		List<PedidoModel> pedidosModel= pedidoModelAssembler.toListModel(pedidos.getContent());
+		
+		Page<PedidoModel> page = new PageImpl<PedidoModel>(pedidosModel, pageable, pedidos.getTotalElements());
+		
+		return page;
 	}
 
-	@GetMapping("/{idPedido}")
-	public PedidoModel findById(@PathVariable Long idPedido) {
-		return pedidoModelAssembler.toModel(pedidoService.findByIdOrThrowException(idPedido));
+	@GetMapping("/{codigo}")
+	public PedidoModel findById(@PathVariable String codigo) {
+		return pedidoModelAssembler.toModel(pedidoService.findByCodigoOrThrowException(codigo));
 	}
 	
 	@PostMapping

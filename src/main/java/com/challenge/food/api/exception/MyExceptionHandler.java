@@ -163,8 +163,8 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(NegocioException.class)
 	public ResponseEntity<?> tratarEntidadeNaoEncontrada(NegocioException e, WebRequest request) {
-
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		Problem body = createProblem(HttpStatus.BAD_REQUEST.value(), e.getMessage(), ProblemType.VIOLACAO_DE_NEGOCIO).build();
+		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 
 	@Override
