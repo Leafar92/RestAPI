@@ -38,7 +38,7 @@ public class ProdutoService {
 		return produtoRepository.findByRestaurante(restaurante);
 	}
 	
-	public Produto findByRestauranteAndId(Long id, Long idRestaurante) {
+	public Produto findByRestauranteAndId(Long idRestaurante, Long id) {
 		return produtoRepository.findByIDAndRestaurante(idRestaurante, id)
 				.orElseThrow(()-> 
 				new NegocioException(String.format("O produto de id %d nao esta vinculado com o restaurante de id %d"
