@@ -1,4 +1,4 @@
-package com.challenge.food.domain.exception;
+package com.challenge.food.infrastructure.storage;
 
 public class StorageException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

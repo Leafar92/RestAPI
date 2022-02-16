@@ -1,0 +1,15 @@
+package com.challenge.food.infrastructure.email;
+
+public class EmailException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
+	public EmailException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public EmailException(Throwable cause) {
+		super(cause);
+	}
+
+	
+}

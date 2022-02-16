@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import com.challenge.food.domain.exception.StorageException;
 import com.challenge.food.domain.service.StorageService;
 
 @Service
