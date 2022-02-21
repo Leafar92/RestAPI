@@ -9,12 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.challenge.food.domain.exception.NegocioException;
 import com.challenge.food.domain.model.Pedido;
 import com.challenge.food.domain.model.StatusPedido;
+import com.challenge.food.domain.repository.PedidoRepository;
 
 @Service
 public class FluxoPedidoService {
 
 	@Autowired
 	private PedidoService pedidoService;
+
+	@Autowired
+	private PedidoRepository pedidoRepository;
 
 	@Transactional
 	public void confirmar(String codigo) {
@@ -25,8 +29,9 @@ public class FluxoPedidoService {
 					codigo, pedido.getStatusPedido().getDescricao(), StatusPedido.CONFIRMADO.getDescricao()));
 		}
 
-		pedido.setStatusPedido(StatusPedido.CONFIRMADO);
-		pedido.setDataConfirmacao(OffsetDateTime.now());
+		pedido.confirmar();
+
+		pedidoRepository.save(pedido);
 	}
 
 	@Transactional
@@ -38,8 +43,10 @@ public class FluxoPedidoService {
 					codigo, pedido.getStatusPedido().getDescricao(), StatusPedido.CANCELADO.getDescricao()));
 		}
 
-		pedido.setStatusPedido(StatusPedido.CANCELADO);
-		pedido.setDataCancelamento(OffsetDateTime.now());
+		pedido.cancelar();
+		
+		pedidoRepository.save(pedido);
+	
 	}
 
 	@Transactional

@@ -12,7 +12,7 @@ import com.challenge.food.domain.service.EmailService;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-public class SmtpEmailService implements EmailService {
+public class SandBoxEmailService implements EmailService {
 
 	@Autowired
 	private JavaMailSender sender;
@@ -31,7 +31,7 @@ public class SmtpEmailService implements EmailService {
 		MimeMessage mimeMessage= sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
 		helper.setFrom(properties.getRemetente());
-		helper.setTo(email.getDestinatarios().toArray(new String[0]));
+		helper.setTo(properties.getDestinatario());
 		helper.setSubject(email.getTitulo());
 	
 			helper.setText(corpo, true);
