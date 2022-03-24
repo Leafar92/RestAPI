@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.challenge.food.api.ResourceAPI;
 import com.challenge.food.api.assembler.CidadeInputDisassembler;
 import com.challenge.food.api.assembler.CidadeModelAssembler;
 import com.challenge.food.api.input.CidadeInput;
@@ -30,8 +31,12 @@ import com.challenge.food.domain.repository.CidadeRepository;
 import com.challenge.food.domain.service.CidadeService;
 import com.challenge.food.domain.service.EstadoService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("cidades")
+@Api(tags = "Cidades")
 public class CidadeController {
 
 	@Autowired
@@ -49,6 +54,7 @@ public class CidadeController {
 	@Autowired
 	private EstadoService estadoService;
 
+	@ApiOperation("Lista as cidades")
 	@GetMapping
 	public List<CidadeModel> listar() {
 		return cidadeModelAssembler.toListModel(cidadeRepository.findAll());
@@ -84,6 +90,8 @@ public class CidadeController {
 			Cidade cidade = cidadeInputDisassembler.toDomainObject(input);
 
 			cidade.setEstado(estado);
+			
+			ResourceAPI.addUriInResponseHeader(cidade.getId());
 
 			return cidadeModelAssembler.toModel(cidadeService.save(cidade));
 

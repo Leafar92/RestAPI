@@ -1,5 +1,6 @@
 package com.challenge.food.domain.repository;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,7 @@ public interface FormaPagamentoRepository extends JpaRepository<FormaPagamento, 
 
 	@Query("from FormaPagamento where nome = :nome")
 	Optional<FormaPagamento> findByName(@Param("nome") String nome);
+	
+	@Query("Select max(dataAtualizacao) from FormaPagamento")
+	OffsetDateTime getDataAtualizacaoMaxima();
 }

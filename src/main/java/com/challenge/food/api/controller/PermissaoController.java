@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.challenge.food.api.ResourceAPI;
 import com.challenge.food.api.assembler.PermissaoInputDisassembler;
 import com.challenge.food.api.assembler.PermissaoModelAssembler;
 import com.challenge.food.api.input.PermissaoInput;
@@ -56,6 +57,7 @@ public class PermissaoController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public PermissaoModel save(@RequestBody @Valid PermissaoInput input) {
 		Permissao permissao = permissaoInputDisassembler.toDomainObject(input);
+		ResourceAPI.addUriInResponseHeader(permissao.getId());
 		return permissaoModelAssembler.toModel(permissaoService.save(permissao));
 	}
 

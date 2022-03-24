@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.challenge.food.api.ResourceAPI;
 import com.challenge.food.api.assembler.UsuarioInputDisassembler;
 import com.challenge.food.api.assembler.UsuarioModelAssembler;
 import com.challenge.food.api.input.UsuarioInput;
@@ -59,6 +60,7 @@ public class UsuarioController {
 	public UsuarioModel save(@RequestBody @Valid UsuarioInput input) {
 		userService.validarSenha(input.getSenha(), input.getSenhaConfirmacao());
 		Usuario user = userInputDisassembler.toDomainObject(input);
+		ResourceAPI.addUriInResponseHeader(user.getId());
 		return userModelAssembler.toModel(userService.save(user));
 	}
 

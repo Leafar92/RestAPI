@@ -17,15 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.challenge.food.api.assembler.FormaPagamentoInputDisassembler;
+import com.challenge.food.api.ResourceAPI;
 import com.challenge.food.api.assembler.GrupoInputDisassembler;
 import com.challenge.food.api.assembler.GrupoModelAssembler;
 import com.challenge.food.api.input.GrupoInput;
-import com.challenge.food.api.input.GrupoInput;
-import com.challenge.food.api.model.GrupoModel;
 import com.challenge.food.api.model.GrupoModel;
 import com.challenge.food.domain.exception.NegocioException;
-import com.challenge.food.domain.model.FormaPagamento;
 import com.challenge.food.domain.model.Grupo;
 import com.challenge.food.domain.repository.GrupoRepository;
 import com.challenge.food.domain.service.GrupoService;
@@ -60,6 +57,7 @@ public class GrupoController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public GrupoModel save(@RequestBody @Valid GrupoInput input) {
 		Grupo grupo = grupoInputDisassembler.toDomainObject(input);
+		ResourceAPI.addUriInResponseHeader(grupo.getId());
 		return grupoModelAssembler.toModel(grupoService.save(grupo));
 	}
 
@@ -68,7 +66,7 @@ public class GrupoController {
 	public void update(@PathVariable Long idGrupo, @RequestBody GrupoInput input) {
 		Grupo grupo = grupoService.findByIdOrThrowException(idGrupo);
 
-		///grupoService.verifyByName(input.getNome());
+		/// grupoService.verifyByName(input.getNome());
 
 		grupoInputDisassembler.copyToDomainObject(grupo, input);
 
@@ -82,8 +80,7 @@ public class GrupoController {
 		try {
 			grupoService.delete(idGrupo);
 		} catch (DataIntegrityViolationException e) {
-			throw new NegocioException(
-					String.format("O grupo de ID %d nao pode ser excluido", idGrupo));
+			throw new NegocioException(String.format("O grupo de ID %d nao pode ser excluido", idGrupo));
 		}
 	}
 

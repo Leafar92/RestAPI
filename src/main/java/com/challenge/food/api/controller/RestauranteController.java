@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.challenge.food.api.ResourceAPI;
 import com.challenge.food.api.assembler.RestauranteInputDisassembler;
 import com.challenge.food.api.assembler.RestauranteModelAssembler;
 import com.challenge.food.api.input.RestauranteInput;
@@ -66,7 +67,7 @@ public class RestauranteController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public RestauranteModel save(@RequestBody RestauranteInput input) {
 		Restaurante saved = service.save(restauranteInputDisassembler.toDomainObject(input));
-
+		ResourceAPI.addUriInResponseHeader(saved.getId());
 		return restauranteModelAssemble.toModel(saved);
 
 	}

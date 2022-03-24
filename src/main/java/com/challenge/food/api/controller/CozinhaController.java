@@ -2,10 +2,8 @@ package com.challenge.food.api.controller;
 
 import java.util.List;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
-import org.hibernate.validator.internal.util.Contracts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -22,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.challenge.food.api.ResourceAPI;
 import com.challenge.food.api.assembler.CozinhaInputDisassembler;
 import com.challenge.food.api.assembler.CozinhaModelAssembler;
 import com.challenge.food.api.input.CozinhaInput;
 import com.challenge.food.api.model.CozinhaModel;
-import com.challenge.food.domain.exception.NegocioException;
 import com.challenge.food.domain.exception.RecursoEmUsoException;
 import com.challenge.food.domain.model.Cozinha;
 import com.challenge.food.domain.repository.CozinhaRespository;
@@ -72,6 +70,8 @@ public class CozinhaController {
 		
 		cozinhaService.verifyByName(input.getNome());
 		
+		ResourceAPI.addUriInResponseHeader(cozinha.getId());
+		
 		return cozinhaAssembler.toModel(cozinhaService.save(cozinha));
 	}
 	
@@ -90,7 +90,7 @@ public class CozinhaController {
 	
 	@DeleteMapping("/{idCozinha}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void update(@PathVariable Long idCozinha){
+	public void delete(@PathVariable Long idCozinha){
 		try {
 			cozinhaService.delete(idCozinha);
 		}catch (DataIntegrityViolationException e) {

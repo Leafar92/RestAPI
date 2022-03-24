@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.challenge.food.api.ResourceAPI;
 import com.challenge.food.api.assembler.PedidoInputDisassembler;
 import com.challenge.food.api.assembler.PedidoModelAssembler;
 import com.challenge.food.api.input.PedidoInput;
@@ -70,6 +71,8 @@ public class PedidoController {
 			pedido.setCliente(cliente);
 			
 			pedido = pedidoService.save(pedido);
+			
+			ResourceAPI.addUriInResponseHeader(pedido.getCodigo());
 			return pedidoModelAssembler.toModel(pedido);
 			
 		}catch (EntidadeNaoEncontradaException e) {
