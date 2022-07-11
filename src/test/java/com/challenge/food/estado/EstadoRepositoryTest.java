@@ -2,56 +2,46 @@ package com.challenge.food.estado;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.stubbing.OngoingStubbing;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import java.util.Optional;
 
-import com.challenge.food.api.assembler.EstadoModelAssembler;
-import com.challenge.food.api.controller.EstadoController;
-import com.challenge.food.api.model.EstadoModel;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.challenge.food.domain.model.Estado;
-import com.challenge.food.domain.service.EstadoService;
+import com.challenge.food.domain.repository.EstadoRespository;
+import com.challenge.food.util.EstadoFactoryTest;
 
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
+@DataJpaTest
 public class EstadoRepositoryTest {
 
-	@InjectMocks
-	private EstadoController estadoControllerMock;
-	
-	@Mock
-	private EstadoService estadoService;
-	
-	@Mock
-	private  EstadoModelAssembler estadoModelAssembler;
+
+	@Autowired
+	private  EstadoRespository estadoRepository;
 	
 	
-	@BeforeEach
-	void setUp() {
-		OngoingStubbing<Estado> thenReturn = BDDMockito
-		.when(estadoService.findByIdOrThrowException(ArgumentMatchers.anyLong()))
-		.thenReturn(EstadoFactoryTest.createValidEstado());
-	}
 	
 	@Test
+	@Disabled
 	public void itShouldFindEstadoByName() {
 		//given
-		EstadoModel found = estadoControllerMock.findById(2L);
+		Estado e = estadoRepository.save(EstadoFactoryTest.createEstadoToBeSaved());
 		
-		String nomeExpected = EstadoFactoryTest.createValidEstado().getNome();
+		String nomeExpected = EstadoFactoryTest.createEstadoToBeSaved().getNome();
 		
 		//when
+		Optional<Estado> estadoFound = estadoRepository.findByName(nomeExpected);
 		
 		
+		//Then
+		assertThat(estadoFound).isNotEmpty();
 		
-		//then
-		assertThat(found).isNotNull();
-		assertThat(found.getNome()).isEqualTo(nomeExpected);
+		assertThat(estadoFound.get().getId()).isNotNull();
+		
+		assertThat(estadoFound.get().getNome()).isEqualTo(nomeExpected);
+		
+		
 	}
 }
